@@ -1,0 +1,7 @@
+From,To,Convert
+g,mg,1000
+kg,mg,1000000
+kg,g,1000
+t,mg,1000000000
+t,g,1000000
+t,kg,1000
