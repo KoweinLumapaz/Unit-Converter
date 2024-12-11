@@ -1,2 +1,3 @@
-import csv
-import cowsay
+pytest #for pytest
+requests #for API request
+tkinter #for gui

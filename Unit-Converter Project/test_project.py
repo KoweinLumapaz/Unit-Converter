@@ -1,40 +1,50 @@
 import pytest
-from project import read_conversions, multiply_units, divide_units
+import tkinter as tk
+from project import multiply_units, divide_units, UnitConverterApp
 
-# Fixtures or setup for conversions
-@pytest.fixture
-def conversions():
-    Lmultiply_conversions = {('mm', 'cm'): 0.1}
-    Ldivide_conversions = {}
-    Wmultiply_conversions = {}
-    Wdivide_conversions = {('g', 'kg'): 1000}
-    return Lmultiply_conversions, Ldivide_conversions, Wmultiply_conversions, Wdivide_conversions
+# Example conversion data for testing
+Lmultiply_conversions = {('cm', 'mm'): 10}
+Ldivide_conversions = {('mm', 'm'): 1000}
 
-def test_read_conversions(conversions):
-    Lmultiply_conversions, Ldivide_conversions, Wmultiply_conversions, Wdivide_conversions = conversions
+Wmultiply_conversions = {('g', 'kg'): 1000}
+Wdivide_conversions = {('kg', 'g'): 1000}
 
-    assert Lmultiply_conversions
-    assert Wdivide_conversions
+currency_rates = {'PHP': 1, 'EUR': 0.016, 'USD': 0.017, 'JPY': 2.62}
 
-def test_length_multiply_conversions(conversions):
-    Lmultiply_conversions, _, _, _ = conversions
+def test_multiply_units():
+    assert multiply_units(100, 'cm', 'mm', Lmultiply_conversions) == 1000.0
 
-    #Mm, to cm conversion
-    result = multiply_units(10, 'mm', 'cm', Lmultiply_conversions)
-    assert pytest.approx(result, 0.00001) == 1
+def test_divide_units():
+    assert divide_units(1, 'mm', 'm', Ldivide_conversions) == 0.001
 
-def test_weight_divide_conversions(conversions):
-    _, _, _, Wdivide_conversions = conversions
+def test_convert_length():
+    root = tk.Tk()
+    converter = UnitConverterApp(root)
+    converter.Lmultiply_conversions = Lmultiply_conversions
+    converter.Ldivide_conversions = Ldivide_conversions
+    assert converter.convert_length(100, 'cm', 'mm') == 1000
 
-    # Test kg to g conversion
-    result = divide_units(1, 'kg', 'g', Wdivide_conversions)
-    assert pytest.approx(result, 0.00001) == 1000
+def test_convert_weight():
+    root = tk.Tk()
+    converter = UnitConverterApp(root)
+    converter.Wmultiply_conversions = Wmultiply_conversions
+    converter.Wdivide_conversions = Wdivide_conversions
+    assert converter.convert_weight(100, 'kg', 'g') == 0.1
 
-def test_temperature_conversions():
-    # Celsius to Fahrenheit
-    C_to_F = (0 * 9/5) + 32
-    assert pytest.approx(C_to_F, 0.00001) == 32
+def test_convert_temperature():
+    root = tk.Tk()
+    app = UnitConverterApp(root)
+    assert app.convert_temperature(0, 'C', 'F') == 32.0
+    assert app.convert_temperature(32, 'F', 'C') == 0.0
+    assert app.convert_temperature(0, 'C', 'K') == 273.15
 
-    # Celsius to Kelvin
-    C_to_K = 0 + 273.15
-    assert pytest.approx(C_to_K, 0.00001) == 273.15
+def test_convert_currency():
+    root = tk.Tk()
+    app = UnitConverterApp(root)
+    app.currency_rates = currency_rates
+    assert round(app.convert_currency(1, 'USD', 'PHP')) == 59
+    assert round(app.convert_currency(50, 'PHP', 'USD')) == 1
+    assert round(app.convert_currency(10, 'EUR', 'JPY')) == 1638
+
+if __name__ == "__main__":
+    pytest.main()
