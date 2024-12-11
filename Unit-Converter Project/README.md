@@ -29,4 +29,7 @@ Its important that you enter or input the data being asked for. Because the user
 
 [!NOTE]
 Users must pay careful attention to their inputs. Invalid data can disrupt the conversion process, it is important for the accuracy of measurement and conversion. 
+This unit converter is good for students or casual users, because of its quick and user-friendly functions. Moreover, this program can be easily
+modify for improvements and to add more functions in the future. To sum up, this program can help users to convert quickly without having a hard time.
+Enjoy the program and its functionality.
 
